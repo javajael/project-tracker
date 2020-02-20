@@ -33,7 +33,11 @@ def get_student_by_github(github):
 
     row = db_cursor.fetchone()
 
-    print("Student: {} {}\nGitHub account: {}".format(row[0], row[1], row[2]))
+    if row is None:
+        print("Student does not exist")
+
+    else:
+        print("Student: {} {}\nGitHub account: {}".format(row[0], row[1], row[2]))
 
 
 def make_new_student(first_name, last_name, github):
@@ -68,7 +72,11 @@ def get_project_by_title(title):
 
     row = db_cursor.fetchone()
 
-    print("Project: {} \nDescription: {}\nMax Grade: {}".format(row[0], row[1], row[2]))
+    if row is None:
+        print("Project does not exist")
+
+    else:
+        print("Project: {} \nDescription: {}\nMax Grade: {}".format(row[0], row[1], row[2]))
 
 
 def get_grade_by_github_title(github, title):
@@ -83,7 +91,11 @@ def get_grade_by_github_title(github, title):
 
     row = db_cursor.fetchone()
 
-    print("Student: {} \nProject: {}\nGrade: {}".format(row[0], row[1], row[2]))
+    if row is None:
+        print("Either project or title does not exist")
+
+    else:
+        print("Student: {} \nProject: {}\nGrade: {}".format(row[0], row[1], row[2]))
 
 
 def assign_grade(github, title, grade):
@@ -130,11 +142,16 @@ def get_all_grades_by_github(github):
 
     row = db_cursor.fetchall()
 
-    i = 0
-    print(f"Student: {row[0][0]}")
-    for i in range(len(row)):
-        print("Project: {} \t Grade: {}".format(row[i][1], row[i][2]))
-        i += 1
+    if row is None:
+        print("Github does not exist")
+
+    else:
+        i = 0
+        print(f"Student: {row[0][0]}")
+
+        for i in range(len(row)):
+            print("Project: {} \t Grade: {}".format(row[i][1], row[i][2]))
+            i += 1
 
 
 def handle_input():
@@ -176,13 +193,15 @@ def handle_input():
             assign_grade(github, title, grade)
 
         elif command == "add_project":
-            title = args[0]
-            description = ' '.join(args[1:-1])
-            max_grade = args[-1]
+            inputs = input_string.split(' | ')
+            title = inputs[1]
+            description = inputs[2]
+            max_grade = inputs[-1]
             add_project(title, description, max_grade)
 
         elif command == "all_grades":
-
+            github = args[0]
+            get_all_grades_by_github(github)
 
         else:
             if command != "quit":
