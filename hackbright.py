@@ -57,8 +57,7 @@ def make_new_student(first_name, last_name, github):
 
 
 def get_project_by_title(title):
-    """Given a project title, print information about the project."""  
-    
+    """Given a project title, print information about the project.""" 
     QUERY = """
         SELECT title, description, max_grade
         FROM projects
@@ -100,7 +99,7 @@ def assign_grade(github, title, grade):
 
     db.session.commit()
 
-    print(f"Successfully added grade:{grade} \nfor student: {github}")
+    print(f"Successfully added grade: {grade} \nfor student: {github}")
 
 
 def add_project(title, description, max_grade):
@@ -161,6 +160,30 @@ def handle_input():
             first_name, last_name, github = args  # unpack!
             make_new_student(first_name, last_name, github)
 
+        elif command == "project_title":
+            title = args[0]
+            get_project_by_title(title)
+
+        elif command == "grade_by_project":
+            github = args[0]
+            title = ' '.join(args[1:])
+            get_grade_by_github_title(github, title)
+
+        elif command == "assign_grade":
+            github = args[0]
+            title = ' '.join(args[1:-1])
+            grade = args[-1]
+            assign_grade(github, title, grade)
+
+        elif command == "add_project":
+            title = args[0]
+            description = ' '.join(args[1:-1])
+            max_grade = args[-1]
+            add_project(title, description, max_grade)
+
+        elif command == "all_grades":
+
+
         else:
             if command != "quit":
                 print("Invalid Entry. Try again.")
@@ -169,7 +192,7 @@ def handle_input():
 if __name__ == "__main__":
     connect_to_db(app)
 
-    # handle_input()
+    handle_input()
 
     # To be tidy, we close our database connection -- though,
     # since this is where our program ends, we'd quit anyway.
